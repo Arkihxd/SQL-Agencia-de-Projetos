@@ -61,19 +61,32 @@ INSERT INTO realiza_Projeto values (7,3);
 INSERT INTO realiza_Projeto values (9,3);
 INSERT INTO realiza_Projeto values (10,1);
 
+create procedure pessoasCidadeCastro()
 select nome_pessoa from Pessoa natural join Cidade where nome_cidade='Castro';
+delimiter ;
+
+create procedure pessoasNenhumProjeto()
 select DISTINCT nome_pessoa from Pessoa, realiza_Projeto where Pessoa.cod_pessoa not in (Select realiza_Projeto.cod_pessoa from realiza_Projeto);
+delimiter ;
+
+create procedure pessoasDoisProjetos()
 select DISTINCT nome_pessoa from Pessoa natural join realiza_Projeto group by cod_pessoa having count(*)>1;
+delimiter ;
+
+create procedure pessoasProjetoGana()
 select distinct  nome_pessoa from Pessoa inner join Projeto inner join realiza_Projeto on nome_projeto='Gama' and Projeto.cod_projeto=realiza_Projeto.cod_projeto and realiza_Projeto .cod_pessoa=Pessoa.cod_pessoa;
+delimiter ;
+
+create procedure cidadesNenhumProjeto()
 select distinct Cidade.nome_cidade from Cidade,Projeto where Cidade.cod_cidade not in (select Projeto.cod_cidade from Projeto);
+delimiter ;
 
+CALL `pessoasCidadeCastro`();
 
+CALL `pessoasNenhumProjeto`();
 
+CALL `pessoasDoisProjetos`();
 
+CALL `pessoasProjetoGana`();
 
-
-
-
-
-
-	
+CALL `cidadesNenhumProjeto`();
